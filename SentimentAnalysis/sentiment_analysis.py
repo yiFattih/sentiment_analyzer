@@ -7,7 +7,12 @@ def sentiment_analyzer(text_to_analyse) -> str:
     headers= {"grpc-metadata-mm-model-id": "sentiment_aggregated-bert-workflow_lang_multi_stock"}
     response= requests.post(url= url, json= myobj, headers= headers)
     formatted_response= json.loads(response.text)
-    print(formatted_response)
-    label= formatted_response['documentSentiment']['label']
-    score= formatted_response['documentSentiment']['score']
+    
+    if response.status_code== 200:
+        label= formatted_response['documentSentiment']['label']
+        score= formatted_response['documentSentiment']['score']
+    elif response.status_code== 500:
+        label= None
+        score= None
+
     return {'label': label, 'score': score}
